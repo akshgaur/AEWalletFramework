@@ -27,7 +27,7 @@ public struct AEWalletFramework{
         provisioningContext = context
     }
     
-    public func addToWallet(prasentingVC: PresentingViewController, identityId: String, identityMobileCredentialId: String, accessToken:String, accessTokenExpiration:Double){
+    public func addToWallet(){
         print("Started AE provisionning")
         provisioningCoordinator!.addToWallet(provisioningContext!)
     }
