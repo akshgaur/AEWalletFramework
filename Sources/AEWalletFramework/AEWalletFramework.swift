@@ -12,29 +12,51 @@ public struct AEWalletFramework{
     var watchDetector: AppleWatchDetector
     
     
-    public init() {
+    public init(prasentingVC: PresentingViewController?, identityId: String?, identityMobileCredentialId: String?, accessToken:String?, accessTokenExpiration:Double?) {
         watchDetector = AppleWatchDetector()
-    }
-    
-    func setInit(prasentingVC: PresentingViewController, identityId: String, identityMobileCredentialId: String, accessToken:String, accessTokenExpiration:Double){
+        
         let settingsManager = SettingsManager.shared()
-        settingsManager.setAccessToken(authToken: accessToken)
+        
+        if let accessToken {
+            settingsManager.setAccessToken(authToken: accessToken)
+        }
+        
         settingsManager.setServerURL(serverURL: "nfcqalocal.alertenterprise.com")
 //        settingsManager.setServerPort(serverPort: String(serverConfig!.port))
-        settingsManager.setAccessTokenExpiration(accessTokenExpiration: accessTokenExpiration)
-        provisioningCoordinator = AccessProvisioningCoordinator(presentingVC: prasentingVC)
-        let context = ProvisioningContext(identityId: identityId, identityMobileCredentialId: identityMobileCredentialId,passDefinitionIdentifier: nil)
-        provisioningContext = context
+        
+        if let accessTokenExpiration {
+            settingsManager.setAccessTokenExpiration(accessTokenExpiration: accessTokenExpiration)
+        }
+        
+        if let prasentingVC {
+            provisioningCoordinator = AccessProvisioningCoordinator(presentingVC: prasentingVC)
+        }
+        if let userId = identityId, let mobileCredentialId = identityMobileCredentialId {
+            let context = ProvisioningContext(identityId: userId, identityMobileCredentialId: mobileCredentialId,passDefinitionIdentifier: nil)
+            provisioningContext = context
+        }
+        
     }
     
+//    func setInit(){
+//        let settingsManager = SettingsManager.shared()
+//        settingsManager.setAccessToken(authToken: accessToken)
+//        settingsManager.setServerURL(serverURL: "nfcqalocal.alertenterprise.com")
+////        settingsManager.setServerPort(serverPort: String(serverConfig!.port))
+//        settingsManager.setAccessTokenExpiration(accessTokenExpiration: accessTokenExpiration)
+//        provisioningCoordinator = AccessProvisioningCoordinator(presentingVC: prasentingVC)
+//        let context = ProvisioningContext(identityId: identityId, identityMobileCredentialId: identityMobileCredentialId,passDefinitionIdentifier: nil)
+//        provisioningContext = context
+//    }
+    
     public func addToWallet(prasentingVC: PresentingViewController, identityId: String, identityMobileCredentialId: String, accessToken:String, accessTokenExpiration:Double){
-        setInit(prasentingVC: prasentingVC, identityId: identityId, identityMobileCredentialId: identityMobileCredentialId, accessToken: accessToken, accessTokenExpiration: accessTokenExpiration)
+//        setInit(prasentingVC: prasentingVC, identityId: identityId, identityMobileCredentialId: identityMobileCredentialId, accessToken: accessToken, accessTokenExpiration: accessTokenExpiration)
         print("Started AE provisionning")
         provisioningCoordinator!.addToWallet(provisioningContext!)
     }
     
     public func canAddPass(prasentingVC: PresentingViewController, identityId: String, identityMobileCredentialId: String, accessToken:String, accessTokenExpiration:Double, completion:@escaping (Result<Bool,Error>)->Void) {
-        setInit(prasentingVC: prasentingVC, identityId: identityId, identityMobileCredentialId: identityMobileCredentialId, accessToken: accessToken, accessTokenExpiration: accessTokenExpiration)
+//        setInit(prasentingVC: prasentingVC, identityId: identityId, identityMobileCredentialId: identityMobileCredentialId, accessToken: accessToken, accessTokenExpiration: accessTokenExpiration)
         let provisionnningHelper = ProvisioningHelper()
         provisionnningHelper.canAddPass(provisioningContext!) { result in
             switch result {
