@@ -69,7 +69,7 @@ public struct AEWalletFramework{
         }
     }
     
-    public func listRemoteSecureElementPasses() -> [PKPass]{
+    public func listRemoteSecureElementPasses() -> [PKSecureElementPass]{
         let provisionnningHelper = ProvisioningHelper()
         let remotePasses = provisionnningHelper.getRemoteSecureElementPasses();
         return remotePasses
