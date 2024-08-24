@@ -7,8 +7,8 @@ import PassKit
 
 public struct AEWalletFramework{
     
-    @State var provisioningCoordinator: AccessProvisioningCoordinator?
-    @State var provisioningContext: ProvisioningContext?
+    var provisioningCoordinator: AccessProvisioningCoordinator?
+    var provisioningContext: ProvisioningContext?
     var watchDetector: AppleWatchDetector
     
     
