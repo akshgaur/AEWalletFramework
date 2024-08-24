@@ -49,13 +49,13 @@ public struct AEWalletFramework{
 //        provisioningContext = context
 //    }
     
-    public func addToWallet(prasentingVC: PresentingViewController, identityId: String, identityMobileCredentialId: String, accessToken:String, accessTokenExpiration:Double){
+    public func addToWallet(){
 //        setInit(prasentingVC: prasentingVC, identityId: identityId, identityMobileCredentialId: identityMobileCredentialId, accessToken: accessToken, accessTokenExpiration: accessTokenExpiration)
         print("Started AE provisionning")
         provisioningCoordinator!.addToWallet(provisioningContext!)
     }
     
-    public func canAddPass(prasentingVC: PresentingViewController, identityId: String, identityMobileCredentialId: String, accessToken:String, accessTokenExpiration:Double, completion:@escaping (Result<Bool,Error>)->Void) {
+    public func canAddPass(completion:@escaping (Result<Bool,Error>)->Void) {
 //        setInit(prasentingVC: prasentingVC, identityId: identityId, identityMobileCredentialId: identityMobileCredentialId, accessToken: accessToken, accessTokenExpiration: accessTokenExpiration)
         let provisionnningHelper = ProvisioningHelper()
         provisionnningHelper.canAddPass(provisioningContext!) { result in
