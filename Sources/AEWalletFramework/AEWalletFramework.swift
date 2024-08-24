@@ -7,13 +7,16 @@ import PassKit
 
 public struct AEWalletFramework{
     
-    var provisioningCoordinator: AccessProvisioningCoordinator
-    public var provisioningContext: ProvisioningContext
+    @State var provisioningCoordinator: AccessProvisioningCoordinator?
+    @State var provisioningContext: ProvisioningContext?
     var watchDetector: AppleWatchDetector
     
     
     public init(prasentingVC: PresentingViewController, identityId: String, identityMobileCredentialId: String, accessToken:String, accessTokenExpiration:Double) {
         watchDetector = AppleWatchDetector()
+    }
+    
+    public func setInit(prasentingVC: PresentingViewController, identityId: String, identityMobileCredentialId: String, accessToken:String, accessTokenExpiration:Double){
         let settingsManager = SettingsManager.shared()
         settingsManager.setAccessToken(authToken: accessToken)
         settingsManager.setServerURL(serverURL: "nfcqalocal.alertenterprise.com")
@@ -24,14 +27,14 @@ public struct AEWalletFramework{
         provisioningContext = context
     }
     
-    public func addToWallet(){
+    public func addToWallet(prasentingVC: PresentingViewController, identityId: String, identityMobileCredentialId: String, accessToken:String, accessTokenExpiration:Double){
         print("Started AE provisionning")
-        provisioningCoordinator.addToWallet(provisioningContext)
+        provisioningCoordinator!.addToWallet(provisioningContext!)
     }
     
     public func canAddPass(completion:@escaping (Result<Bool,Error>)->Void) {
         let provisionnningHelper = ProvisioningHelper()
-        provisionnningHelper.canAddPass(provisioningContext) { result in
+        provisionnningHelper.canAddPass(provisioningContext!) { result in
             switch result {
             case .success(let canAdd):
                 completion(.success(canAdd))
@@ -61,7 +64,7 @@ public struct AEWalletFramework{
     
     public func startProvisioning(completion:@escaping (Result<ProvisioningCredential,Error>)->Void){
         let provisioningHelper = ProvisioningHelper()
-        provisioningHelper.startPassProvisioning(provisioningContext) { reult in
+        provisioningHelper.startPassProvisioning(provisioningContext!) { reult in
             switch reult {
             case .success(let credential):
                 completion(.success(credential))
