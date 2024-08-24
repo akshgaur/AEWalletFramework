@@ -16,7 +16,7 @@ public struct AEWalletFramework{
         watchDetector = AppleWatchDetector()
     }
     
-    public func setInit(prasentingVC: PresentingViewController, identityId: String, identityMobileCredentialId: String, accessToken:String, accessTokenExpiration:Double){
+    func setInit(prasentingVC: PresentingViewController, identityId: String, identityMobileCredentialId: String, accessToken:String, accessTokenExpiration:Double){
         let settingsManager = SettingsManager.shared()
         settingsManager.setAccessToken(authToken: accessToken)
         settingsManager.setServerURL(serverURL: "nfcqalocal.alertenterprise.com")
@@ -27,12 +27,14 @@ public struct AEWalletFramework{
         provisioningContext = context
     }
     
-    public func addToWallet(){
+    public func addToWallet(prasentingVC: PresentingViewController, identityId: String, identityMobileCredentialId: String, accessToken:String, accessTokenExpiration:Double){
+        setInit(prasentingVC: prasentingVC, identityId: identityId, identityMobileCredentialId: identityMobileCredentialId, accessToken: accessToken, accessTokenExpiration: accessTokenExpiration)
         print("Started AE provisionning")
         provisioningCoordinator!.addToWallet(provisioningContext!)
     }
     
-    public func canAddPass(completion:@escaping (Result<Bool,Error>)->Void) {
+    public func canAddPass(prasentingVC: PresentingViewController, identityId: String, identityMobileCredentialId: String, accessToken:String, accessTokenExpiration:Double, completion:@escaping (Result<Bool,Error>)->Void) {
+        setInit(prasentingVC: prasentingVC, identityId: identityId, identityMobileCredentialId: identityMobileCredentialId, accessToken: accessToken, accessTokenExpiration: accessTokenExpiration)
         let provisionnningHelper = ProvisioningHelper()
         provisionnningHelper.canAddPass(provisioningContext!) { result in
             switch result {
