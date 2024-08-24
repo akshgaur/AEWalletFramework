@@ -12,7 +12,7 @@ public struct AEWalletFramework{
     var watchDetector: AppleWatchDetector
     
     
-    public init(prasentingVC: PresentingViewController, identityId: String, identityMobileCredentialId: String, accessToken:String, accessTokenExpiration:Double) {
+    public init() {
         watchDetector = AppleWatchDetector()
     }
     
