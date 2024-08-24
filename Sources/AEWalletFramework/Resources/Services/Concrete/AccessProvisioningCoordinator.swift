@@ -151,7 +151,7 @@ extension AccessProvisioningCoordinator {
     
     private func getPassThumbnailImage(for context: ProvisioningContext) -> UIImage {
         // Unsafely unwrapping because there should always be default card art assets
-        return UIImage(named: context.product + "_card_art")!
+        return UIImage(named: "hospitality" + "_card_art")!
     }
 
 }

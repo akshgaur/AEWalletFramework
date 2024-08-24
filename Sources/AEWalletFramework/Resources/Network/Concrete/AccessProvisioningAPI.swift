@@ -16,11 +16,11 @@ public class AccessProvisioningAPI: NSObject, ProvisioningAPI {
         
         var resource: APIResource
 
-        if(context.passDefinitionIdentifier != nil) {
-            resource = ProvisioningCredentialResourceForPassDefinition(passDefintionIdentier: "\(context.passDefinitionIdentifier!)", type: context.product)
-        } else {
-            resource = ProvisioningCredentialResource(type: context.product)
-        }
+//        if(context.passDefinitionIdentifier != nil) {
+//            resource = ProvisioningCredentialResourceForPassDefinition(passDefintionIdentier: "\(context.passDefinitionIdentifier!)", type: context.product)
+//        } else {
+            resource = ProvisioningCredentialResource()
+//        }
         
         let payloadData =  ["identityId": context.employeeId, "identityMobileCredentialId": context.propertyId]
         let payload = try? JSONEncoder().encode(payloadData)

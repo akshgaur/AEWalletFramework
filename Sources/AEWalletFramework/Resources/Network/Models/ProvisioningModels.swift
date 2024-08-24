@@ -10,7 +10,7 @@ import UIKit
 
 // MARK: - Provisioning Credential Resource
 public struct ProvisioningCredentialResource: APIResource {
-    var type: String
+//    var type: String
     
 //    var path: String { return "/partner/v1/prepareProvisioning" }
     var path: String { return "/partner/" + "v1" + "/prepareProvisioning"  }
@@ -94,17 +94,17 @@ public struct ProvisioningContext: Codable {
     var propertyId: String?
     var reservationId: String?
     
-    var product: String
+    var product: String?
     var credentialType: String?
     var cardTemplateIdentifier: String?
     var passDefinitionIdentifier: String?
     
-    init(identityId:String?, identityMobileCredentialId: String?, product: String, credentialType: String?, cardTemplateIdentifier: String?, passDefinitionIdentifier: String?) {
+    init(identityId:String?, identityMobileCredentialId: String?, passDefinitionIdentifier: String?) {
         self.employeeId = identityId
         self.propertyId = identityMobileCredentialId
-        self.product = product
-        self.credentialType = credentialType
-        self.cardTemplateIdentifier = cardTemplateIdentifier
+//        self.product = product
+//        self.credentialType = credentialType
+//        self.cardTemplateIdentifier = cardTemplateIdentifier
         self.passDefinitionIdentifier = passDefinitionIdentifier
     }
     

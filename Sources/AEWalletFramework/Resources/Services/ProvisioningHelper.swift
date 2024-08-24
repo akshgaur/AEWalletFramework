@@ -25,7 +25,7 @@ class ProvisioningHelper: NSObject {
     func passExists(provisioningCredentialIdentifier: String) -> Bool {
         var exists = false
         
-        let passes = getPasses(of: .secureElement)
+        let passes = getSecureElementPasses(of: .secureElement)
         
         if passes.isEmpty { return false }
         
@@ -38,14 +38,14 @@ class ProvisioningHelper: NSObject {
     }
     
     func getPass(provisioningCredentialIdentifier: String) -> PKPass? {
-        let passes = getPasses(of: .secureElement)
+        let passes = getSecureElementPasses(of: .secureElement)
         if passExists(provisioningCredentialIdentifier: provisioningCredentialIdentifier) {
             return passes.first{($0.paymentPass?.primaryAccountIdentifier.dropFirst(7))! == provisioningCredentialIdentifier}
         }
         return nil
     }
     
-    func getPasses(of passType: PKPassType) -> [PKPass] {
+    func getSecureElementPasses(of passType: PKPassType) -> [PKPass] {
         if !PKPassLibrary.isPassLibraryAvailable() { return [] }
         
         let passesOfType = PKPassLibrary().passes(of: passType)
@@ -147,15 +147,39 @@ class ProvisioningHelper: NSObject {
             }
             
             completion(.success(config))
-//            guard let vc = self.createSEViewController(for: config) else { return }
-////            self.presentingViewController.spinnerView.stopAnimating()
-//            self.presentingViewController.present(vc, animated: true)
         }
     }
     
     private func getPassThumbnailImage(for context: ProvisioningContext) -> UIImage {
         // Unsafely unwrapping because there should always be default card art assets
-        return UIImage(named: context.product + "_card_art")!
+        return UIImage(named: "hospitality" + "_card_art")!
+    }
+    
+    
+    func startPassProvisioning(_ context: ProvisioningContext, completion:@escaping (Result<ProvisioningCredential,Error>)->Void)  {
+        
+        provisioningAPI.preparePassProvisioning(context) { apiResponse in
+            //            self.presentingViewController.spinnerView.startAnimating()
+            
+            guard let credential = apiResponse.credential else {
+                // TODO: Handle nil credentials
+                
+                if apiResponse.error != nil {
+                    //                    self.presentingViewController.showAlert(title: "Error", message: apiResponse.error != nil ? apiResponse.error! : "Error fetching Credential from Server", actionTitle: "OK")
+                    //                    self.presentingViewController.spinnerView.stopAnimating()
+                }
+                completion(.failure(apiResponse.error as! Error))
+                return;
+            }
+            
+            if (self.passExists(provisioningCredentialIdentifier: credential.provisioningInformation.provisioningCredentialIdentifier)) {
+                // TODO: Have this class return an error rather than present
+                //                self.presentingViewController.showAlert(title: "Error", message: "Pass already provisioned in Wallet", actionTitle: "OK")
+                completion(.failure(NSLocalizedString("Error", comment: "Pass already provisioned in Wallet") as! Error))
+            }
+            
+            completion(.success(credential))
+        }
     }
 }
 

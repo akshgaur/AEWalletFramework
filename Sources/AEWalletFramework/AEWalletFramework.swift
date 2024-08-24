@@ -20,11 +20,11 @@ public struct AEWalletFramework{
 //        settingsManager.setServerPort(serverPort: String(serverConfig!.port))
         settingsManager.setAccessTokenExpiration(accessTokenExpiration: accessTokenExpiration)
         provisioningCoordinator = AccessProvisioningCoordinator(presentingVC: prasentingVC)
-        let context = ProvisioningContext(identityId: identityId, identityMobileCredentialId: identityMobileCredentialId, product: "hospitality", credentialType: "hospitality" + "-credential-type", cardTemplateIdentifier: "1234", passDefinitionIdentifier: nil)
+        let context = ProvisioningContext(identityId: identityId, identityMobileCredentialId: identityMobileCredentialId,passDefinitionIdentifier: nil)
         provisioningContext = context
     }
     
-    public func startProvisioning(){
+    public func addToWallet(){
         print("Started AE provisionning")
         provisioningCoordinator.addToWallet(provisioningContext)
     }
@@ -50,13 +50,30 @@ public struct AEWalletFramework{
     
     public func listDeviceSecureElementPasses() -> [PKPass]{
         let provisionnningHelper = ProvisioningHelper()
-        let devicePasses = provisionnningHelper.getPasses(of: .secureElement)
+        let devicePasses = provisionnningHelper.getSecureElementPasses(of: .secureElement)
         return devicePasses
     }
     
     public func isWatchPaired() -> Bool{
         watchDetector.detect()
         return watchDetector.watchPaired
+    }
+    
+    public func startProvisioning(completion:@escaping (Result<ProvisioningCredential,Error>)->Void){
+        let provisioningHelper = ProvisioningHelper()
+        provisioningHelper.startPassProvisioning(provisioningContext) { reult in
+            switch reult {
+            case .success(let credential):
+                completion(.success(credential))
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+        }
+    }
+    
+    public func getPass(provisioningCredentialIdentifier: String)-> PKPass?{
+        let provisioningHelper = ProvisioningHelper()
+        return provisioningHelper.getPass(provisioningCredentialIdentifier: provisioningCredentialIdentifier)
     }
     
 }
